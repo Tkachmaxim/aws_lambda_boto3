@@ -1,2 +1,0 @@
-tensorflow=={{cookiecutter.tensorflow_version}}
-pillow
