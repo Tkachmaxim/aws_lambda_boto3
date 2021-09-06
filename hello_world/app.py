@@ -36,12 +36,11 @@ def lambda_handler(event, context):
     z_data = r.json()['records']
     new_list = sorted(z_data, key=lambda x: x['fields']['ID'])
     result = ((z['fields'])['title'] for z in new_list)
-    show=json.loads(result.__next__())
 
 
-    return {
+    yield {
         "statusCode": 200,
         "body": json.dump(
-            show
+            result.__next__()
     ),
     }
