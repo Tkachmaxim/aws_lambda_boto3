@@ -38,9 +38,10 @@ def lambda_handler(event, context):
     result = ((z['fields'])['title'] for z in new_list)
 
 
-    yield {
+    return {
         "statusCode": 200,
         "body": json.dump(
+            result.__next__()
             result.__next__()
     ),
     }
