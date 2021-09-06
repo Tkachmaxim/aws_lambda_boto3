@@ -1,41 +1,46 @@
 import json
+import requests
 
 # import requests
 
 
 def lambda_handler(event, context):
-    """Sample pure Lambda function
+    AIRTABLE_BASE_ID = 'appYQAU5CcytTTkKs'
+    AIRTABLE_NAME = 'MainTable'
+    API_KEY = 'keyrT0V59Ejlc9JaH'
+    END_POINT = f'https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_NAME}'
 
-    Parameters
-    ----------
-    event: dict, required
-        API Gateway Lambda Proxy Input Format
+    headers = {
+        "Authorization": f"Bearer {API_KEY}",
+        "Content-Type": "application/json"
+    }
 
-        Event doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html#api-gateway-simple-proxy-for-lambda-input-format
+    data = {
+        "records": [
+            {
+                "fields": {
+                    "ID": 1,
+                    "title": "Проверка 1"
+                }
+            },
+            {
+                "fields": {
+                    "ID": 2,
+                    "title": "Проверка 2"
+                }
+            }
+        ]
+    }
 
-    context: object, required
-        Lambda Context runtime methods and attributes
+    r = requests.get(END_POINT, json=data, headers=headers)
+    z_data = r.json()['records']
+    new_list = sorted(z_data, key=lambda x: x['fields']['ID'])
+    result = ((z['fields'])['title'] for z in new_list)
 
-        Context doc: https://docs.aws.amazon.com/lambda/latest/dg/python-context-object.html
-
-    Returns
-    ------
-    API Gateway Lambda Proxy Output Format: dict
-
-        Return doc: https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html
-    """
-
-    # try:
-    #     ip = requests.get("http://checkip.amazonaws.com/")
-    # except requests.RequestException as e:
-    #     # Send some context about this error to Lambda Logs
-    #     print(e)
-
-    #     raise e
 
     return {
         "statusCode": 200,
         "body": json.dumps(
-            'HELLO WORD !'
+            result.__next__()
     ),
     }
