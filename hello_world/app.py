@@ -1,6 +1,6 @@
 import json
-import requests
 import time
+import requests
 
 
 def lambda_handler(event, context):
