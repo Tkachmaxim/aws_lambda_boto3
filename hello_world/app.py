@@ -9,7 +9,7 @@ def lambda_handler(event, context):
     AIRTABLE_NAME = 'MainTable'
     API_KEY = 'keyrT0V59Ejlc9JaH'
 
-    #create url for connect
+    #create url for connect_
     END_POINT = f'https://api.airtable.com/v0/{AIRTABLE_BASE_ID}/{AIRTABLE_NAME}'
 
 
