@@ -1,6 +1,10 @@
+import requests
+import json
+
+
 AIRTABLE_BASE_ID = 'appYQAU5CcytTTkKs'
 AIRTABLE_NAME = 'MainTable'
-API_KEY = 'keyrT0V59Ejlc9JaH'
+API_KEY = 'keylMkRVCV25NxOBl'
 
 # create url for connect
 END_POINT = f'https://airtable.com/shrp5Xhe3bkzWkkhz/tblX1jGmYZoqyHrlE'
@@ -12,4 +16,5 @@ headers = {
 }
 
 # get request in json formats
-r = requests.get(END_POINT, headers=headers)
+r = requests.get(END_POINT, data=, headers=headers)
+print(r)
