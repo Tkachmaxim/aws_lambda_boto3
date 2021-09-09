@@ -4,7 +4,7 @@ import requests
 import os
 
 
-def lambda_handler():
+def lambda_handler(event, context):
     start_time=int(time.time())
     # connect to the table
     AIRTABLE_BASE_ID = 'appYQAU5CcytTTkKs'
