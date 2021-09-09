@@ -4,8 +4,7 @@ import requests
 import os
 
 
-def lambda_handler():
-    start_time=int(time.time())
+def lambda_handler(event, context):
     # connect to the table
     AIRTABLE_BASE_ID = 'appYQAU5CcytTTkKs'
     AIRTABLE_NAME = 'MainTable'
@@ -35,7 +34,7 @@ def lambda_handler():
 
     # create algorithm of extraction data as circle buffer that change sequently every second
     # if we get time in second and divide on lenght of data getting remainder we will get index
-    start_index = start_time % len(new_list)
+    start_index = (int(time.time())) % len(new_list)
     # and index should be more on 3 as we get 3 records
     end_index = start_index + 3
     # but if we get  end index that more len of our list data make another list
@@ -46,8 +45,19 @@ def lambda_handler():
     else:
         result = new_list[start_index:end_index]
 
-
     return {
         "statusCode": 200,
         "body": json.dumps(result, ensure_ascii=False)
     }
+
+
+#cloudwatch_logs.get_paginator('list_metrics')
+
+'''
+# List metrics through the pagination interface
+paginator = cloudwatch.get_paginator('list_metrics')
+for response in paginator.paginate(Dimensions=[{'Name': 'LogGroupName'}],
+                                   MetricName='IncomingLogEvents',
+                                   Namespace='AWS/Logs'):
+    print(response['Metrics'])
+'''
