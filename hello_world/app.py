@@ -35,6 +35,8 @@ def lambda_handler(event, context):
     new_list = [(z['fields']['title']) for z in sort_list]
 
     # create algorithm of extraction data as circle buffer that change sequently every second
+    # before getting index make 5 sec pause for correct data
+    time.sleep(5)
     # get index from logs event
     client = boto3.client('logs')
     stream_response = client.describe_log_streams(
