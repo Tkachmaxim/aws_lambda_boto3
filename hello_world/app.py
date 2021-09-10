@@ -57,15 +57,18 @@ def lambda_handler(event, context):
 
 
 client = boto3.client('logs')
-stream_response = client.describe_log_streams(
-        logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy", # Can be dynamic]
-        orderBy='LastEventTime',                # For the latest events
-        limit=50
-        )
-name_of_logs=stream_response['logStreams'][-1:][0]['logStreamName']
+for i in range(5):
 
-response = client.get_log_events(
-             logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",
-             logStreamName=f'{name_of_logs}'
-        )
-print(len(response['events'])/3)
+    stream_response = client.describe_log_streams(
+            logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy", # Can be dynamic]
+            orderBy='LastEventTime',                # For the latest events
+            limit=50
+            )
+    name_of_logs=stream_response['logStreams'][-1:][0]['logStreamName']
+
+    response = client.get_log_events(
+                 logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",
+                 logStreamName=f'{name_of_logs}'
+            )
+    print(len(response['events'])/3)
+    print(time.time())
