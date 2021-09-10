@@ -7,23 +7,6 @@ import boto3
 
 
 def lambda_handler(event, context):
-    #get index from logs event
-    client = boto3.client('logs')
-    stream_response = client.describe_log_streams(
-        logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",  # Can be dynamic]
-        orderBy='LastEventTime',  # For the latest events
-        limit=50
-    )
-    name_of_logs = stream_response['logStreams'][-1:][0]['logStreamName']
-
-    response = client.get_log_events(
-        logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",
-        logStreamName=f'{name_of_logs}'
-    )
-
-    start_index=(len(response['events']) / 3)
-
-
     # connect to the table
     AIRTABLE_BASE_ID = 'appYQAU5CcytTTkKs'
     AIRTABLE_NAME = 'MainTable'
@@ -52,6 +35,20 @@ def lambda_handler(event, context):
     new_list = [(z['fields']['title']) for z in sort_list]
 
     # create algorithm of extraction data as circle buffer that change sequently every second
+    # get index from logs event
+    client = boto3.client('logs')
+    stream_response = client.describe_log_streams(
+        logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",  # Can be dynamic]
+        orderBy='LastEventTime',  # For the latest events
+        limit=50
+    )
+    name_of_logs = stream_response['logStreams'][-1:][0]['logStreamName']
+
+    response = client.get_log_events(
+        logGroupName="/aws/lambda/sam-hello-world-HelloWorldFunction-YhDOKxjYdMDy",
+        logStreamName=f'{name_of_logs}'
+    )
+    start_index = int((len(response['events']) / 4))
      # and index should be more on 3 as we get 3 records
     end_index = start_index + 3
     # but if we get  end index that more len of our list data make another list
@@ -62,14 +59,11 @@ def lambda_handler(event, context):
     else:
         result = new_list[start_index:end_index]
 
-    print(result)
 
     return {
         "statusCode": 200,
         "body": json.dumps(result, ensure_ascii=False)
     }
-
-
 
 
 
